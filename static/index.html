@@ -1,0 +1,203 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AeroPulse India · Indian Aviation Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+<style>
+:root{--bg:#060E1E;--s1:#0B1630;--s2:#101E3F;--bd:#1C2C50;--tx:#E8EEFA;--mu:#8DA0C4;--sky:#38BDF8;--sf:#FF9F43;--gr:#34D399;--vi:#A78BFA;--ro:#FB7185}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--tx);font:15px/1.55 Inter,system-ui,sans-serif;background-color:var(--bg);background-image:radial-gradient(900px 520px at 88% -8%,#1e40af55,transparent),radial-gradient(700px 420px at -6% 12%,#0e749044,transparent);background-repeat:no-repeat}html{background:var(--bg)}
+a{color:var(--sky);text-decoration:none}.mu{color:var(--mu)}h1,h2,h3{margin:0}
+.nav{position:sticky;top:0;z-index:2000;display:flex;align-items:center;gap:18px;padding:12px 28px;background:#060e1eb8;backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+.nav::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--sf) 33%,#fff 33% 66%,var(--gr) 66%);opacity:.8}
+.logo{font-weight:800;font-size:19px;color:var(--tx);display:flex;gap:8px;align-items:center}.logo b{color:var(--sky)}
+.logo i{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--sky),#2563eb);font-style:normal}
+.links{display:flex;gap:2px;flex:1;overflow-x:auto}.links a{color:var(--mu);padding:7px 13px;border-radius:9px;font-weight:500;white-space:nowrap}.links a:hover{color:var(--tx);background:var(--s2)}.links a.on{color:#fff;background:var(--s2);box-shadow:inset 0 -2px 0 var(--sky)}
+select{background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px 10px;font:inherit;outline:none;max-width:100%}select:focus{border-color:var(--sky)}
+main{max-width:1240px;margin:auto;padding:26px 24px 50px}.load{padding:80px;text-align:center;color:var(--mu)}
+.card{background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:16px;padding:18px;animation:up .5s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.card h3{font-size:15px;margin-bottom:2px}.card .sub{font-size:12.5px;color:var(--mu);margin-bottom:12px}
+.g{display:grid;gap:16px;margin-top:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.g5{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.ch{position:relative;height:300px}.ch.s{height:250px}.map{height:480px;border-radius:12px;border:1px solid var(--bd)}
+.hero{position:relative;overflow:hidden;border-radius:22px;padding:46px 40px;border:1px solid var(--bd);background:linear-gradient(120deg,#0b1d4a,#0a2a5e 55%,#0b4a7a)}
+.hero h1{font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.08;max-width:700px}.hero h1 span{background:linear-gradient(90deg,var(--sf),#ffd08a);-webkit-background-clip:text;color:transparent}
+.hero p{max-width:600px;color:#b9c8e6;font-size:17px;margin:14px 0 22px}.eye{display:inline-block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--sky);margin-bottom:12px;font-weight:600}
+.btn{display:inline-block;padding:11px 20px;border-radius:12px;font-weight:600;margin-right:10px;background:var(--sf);color:#1a1100}.btn.o{background:transparent;border:1px solid #5b7bb8;color:#fff}.btn:hover{filter:brightness(1.1)}
+.hero svg{position:absolute;right:-30px;top:0;height:100%;opacity:.55;pointer-events:none}.arc{fill:none;stroke:var(--sky);stroke-width:1.5;stroke-dasharray:6 8;animation:dash 18s linear infinite}@keyframes dash{to{stroke-dashoffset:-400}}
+.kpi span{font-size:12.5px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}.kpi b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em;margin:4px 0}.kpi em{font-style:normal;font-size:12.5px;color:var(--mu)}
+.chip{font-style:normal;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;margin-right:6px}.chip.up{background:#34d39922;color:var(--gr)}.chip.dn{background:#fb718522;color:var(--ro)}
+.bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:6px}.bar h2{font-size:26px;letter-spacing:-.02em;margin-right:auto}.vs{color:var(--mu);font-weight:700}
+.prof{border-top:3px solid var(--c)}.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-top:12px}.mini b{display:block;font-size:20px}.mini span{font-size:12px;color:var(--mu)}
+table{width:100%;border-collapse:collapse}td,th{padding:9px 8px;text-align:left;border-bottom:1px solid var(--bd);font-size:14px}th{color:var(--mu);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em}tr.k{cursor:pointer}tr.k:hover td{background:#ffffff08}
+.ins{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd)}.ins:last-child{border:0}.ins i{font-style:normal;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--s1);flex:none}
+.tabs{display:inline-flex;background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:3px}.tabs button{background:none;border:0;color:var(--mu);padding:7px 14px;border-radius:8px;font:inherit;cursor:pointer}.tabs button.on{background:var(--sky);color:#04122a;font-weight:600}
+.note{font-size:13px;color:var(--mu);border-left:3px solid var(--sf);padding:6px 12px;margin-top:14px;background:#ff9f430d;border-radius:0 8px 8px 0}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:14px 0}.flow div{flex:1;min-width:130px;padding:14px;border-radius:12px;background:var(--s1);border:1px solid var(--bd);text-align:center;font-size:13px}.flow b{display:block;font-size:15px;color:var(--sky);margin-bottom:2px}.flow s{align-self:center;color:var(--sf);text-decoration:none;font-size:20px}
+footer{border-top:1px solid var(--bd);padding:26px;text-align:center;color:var(--mu);font-size:13px}
+.leaflet-container{background:#08122a;font-family:inherit}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--s2);color:var(--tx);border:1px solid var(--bd)}.leaflet-popup-content b{font-size:15px}
+@media(max-width:700px){.nav{padding:10px 14px;flex-wrap:wrap}.hero{padding:28px 20px}.g2{grid-template-columns:1fr}main{padding:16px 12px}}
+</style></head><body>
+<header class="nav"><a class="logo" href="#/overview"><i>✈</i><span>Aero<b>Pulse</b> India</span></a>
+<nav class="links"><a data-p="overview" href="#/overview">Overview</a><a data-p="airlines" href="#/airlines">Airlines</a><a data-p="airports" href="#/airports">Airports</a><a data-p="routes" href="#/routes">Routes</a><a data-p="reliability" href="#/reliability">Reliability</a><a data-p="forecast" href="#/forecast">Forecast</a><a data-p="about" href="#/about">About</a></nav>
+<select id="yearSel" title="Year"></select></header>
+<main id="app"></main>
+<footer>AeroPulse India · Data: DGCA &amp; Ministry of Civil Aviation via <a href="https://github.com/Vonter/india-aviation-traffic">Vonter/india-aviation-traffic</a> · Built with Hadoop, Spark, Python, Flask</footer>
+<script>
+const $=(s,r=document)=>r.querySelector(s),CH={},cache={},S={year:null,meta:null},MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const COL=['#38BDF8','#FF9F43','#34D399','#A78BFA','#FB7185','#FACC15','#22D3EE','#94A3B8'];let MAP=null;
+const API=async u=>{if(cache[u])return cache[u];const r=await fetch(u),j=await r.json();if(!r.ok)throw j;return cache[u]=j};
+const fmt=n=>n==null?'–':Math.abs(n)>=1e9?(n/1e9).toFixed(2)+'B':Math.abs(n)>=1e6?(n/1e6).toFixed(n>=1e8?0:1)+'M':Math.abs(n)>=1e3?(n/1e3).toFixed(n>=1e5?0:1)+'K':Math.round(n);
+const pct=g=>g==null?'–':(g>0?'+':'')+g+'%',T=s=>String(s).toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+const chip=g=>g==null?'':`<i class="chip ${g>=0?'up':'dn'}">${g>=0?'▲':'▼'} ${Math.abs(g)}%</i>`;
+const kpi=(l,v,sub,raw=true)=>`<div class="card kpi"><span>${l}</span><b ${raw&&typeof v=='number'?`data-v="${v}"`:''}>${raw&&typeof v=='number'?0:v}</b><em>${sub||''}</em></div>`;
+function count(el){const to=+el.dataset.v,t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/900),e=1-Math.pow(1-p,3);el.textContent=fmt(to*e);if(p<1)requestAnimationFrame(f)})(t0)}
+const grad=(c,col)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,300);g.addColorStop(0,col+'55');g.addColorStop(1,col+'00');return g};
+Chart.defaults.color='#8DA0C4';Chart.defaults.font.family='Inter,system-ui,sans-serif';Chart.defaults.borderColor='rgba(141,160,196,.12)';
+const opt=(x={},axes=true)=>{const v=c=>c.chart.config.type=='doughnut'?c.parsed:c.chart.options.indexAxis=='y'?c.parsed.x:c.parsed.y;
+ const base={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},animation:{duration:700},
+ plugins:{legend:{labels:{usePointStyle:true,boxWidth:7,filter:i=>!/^_/.test(i.text)}},tooltip:{backgroundColor:'#0B1530',borderColor:'#1C2C50',borderWidth:1,padding:10,filter:i=>!/^_/.test(i.dataset.label),callbacks:{label:c=>` ${c.dataset.label||c.label}: ${fmt(v(c))}`}}},
+ ...(axes?{scales:{x:{grid:{display:false}},y:{ticks:{callback:q=>fmt(q)}}}}:{})};
+ return {...base,...x,plugins:{...base.plugins,...(x.plugins||{})}}};
+const mk=(id,cfg)=>{CH[id]?.destroy();return CH[id]=new Chart(document.getElementById(id),cfg)};
+const ln=(label,data,c,fill=false,dash)=>({label,data,borderColor:c,backgroundColor:fill?x=>grad(x,c):c,fill,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:5,borderDash:dash,spanGaps:false});
+const fill=(id,items,val,t=x=>x)=>{$(id).innerHTML=items.map(x=>`<option value="${x.v??x}" ${(x.v??x)==val?'selected':''}>${t(x.t??x.v??x)}</option>`).join('')};
+const yl=y=>y==S.meta.ly&&S.meta.lm<12?`${y} (YTD)`:y;
+const yearTick=(a)=>a.map(yl);
+
+/* ---------- map ---------- */
+function baseMap(id){MAP=L.map(id,{zoomControl:true,minZoom:4}).setView([22.6,80],5);
+ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(MAP);return MAP}
+async function network(map,limit,pick){const [ap,rt]=await Promise.all([API('/api/airports?year='+S.year),API(`/api/routes?year=${S.year}&limit=${limit}`)]);
+ const pos={};ap.forEach(a=>{if(a.lat!=null)pos[a.city]=[a.lat,a.lon]});const layer=L.layerGroup().addTo(map),mx=rt[0]?.pax||1;
+ rt.forEach(r=>{if(!pos[r.a]||!pos[r.b])return;const k=r.pax/mx;L.polyline([pos[r.a],pos[r.b]],{color:'#38BDF8',weight:.7+k*7,opacity:.18+.6*k}).addTo(layer)
+  .bindTooltip(`<b>${T(r.a)} ⇄ ${T(r.b)}</b><br>${fmt(r.pax)} passengers`).on('click',()=>pick?pick(r.a,r.b):location.hash=`#/routes/${r.a}/${r.b}`)});
+ const mp=Math.max(...ap.map(a=>a.pax));
+ ap.filter(a=>a.lat!=null).forEach(a=>L.circleMarker(pos[a.city],{radius:3.5+Math.sqrt(a.pax/mp)*19,color:'#FF9F43',weight:1.5,fillColor:'#FF9F43',fillOpacity:.4}).addTo(layer)
+  .bindPopup(`<b>${T(a.city)}</b><br>Passengers: <b>${fmt(a.pax)}</b> ${chip(a.growth)}<br>Top partner: ${T(a.top||'–')}<br><a href="#/airports/${encodeURIComponent(a.city)}">Open airport analysis →</a>`));
+ return {layer,pos}}
+
+/* ---------- OVERVIEW ---------- */
+async function overview(){const o=await API('/api/overview?year='+S.year),ytd=S.year==S.meta.ly&&S.meta.lm<12;
+ const mv=o.months.filter(v=>v!=null),pk=o.months.indexOf(Math.max(...mv)),tot=o.share.reduce((s,x)=>s+x[1],0),yi=o.years.indexOf(2019),cur=o.years.indexOf(S.year);
+ $('#app').innerHTML=`<section class="hero"><svg viewBox="0 0 400 300"><path class="arc" d="M20 250 Q200 -40 380 90"/><path class="arc" d="M60 280 Q220 120 370 230"/><path class="arc" d="M30 160 Q180 40 330 40"/></svg>
+ <span class="eye">DGCA · Ministry of Civil Aviation · 2015 – ${MN[S.meta.lm-1]} ${S.meta.ly}</span><h1>India's skies, <span>decoded.</span></h1>
+ <p>Explore every airline, airport and route in Indian domestic aviation. Compare, analyse and forecast — from real government data processed through a Hadoop and Spark pipeline.</p>
+ <a class="btn" href="#/airlines">Compare airlines</a><a class="btn o" href="#/routes">Explore routes</a></section>
+ <div class="g g5">${kpi('Passengers · '+yl(S.year),o.pax,chip(o.growth)+(ytd?'vs same months last yr':'vs last year'))}${kpi('Flights',o.flights,'scheduled domestic')}${kpi('Airlines',o.airlines,'with traffic')}${kpi('Airports',o.cities,'cities connected')}${kpi('Routes',o.routes,'city pairs served')}</div>
+ <div class="g g2"><div class="card"><h3>Monthly passengers · ${yl(S.year)}</h3><div class="sub">Seasonality of domestic traffic</div><div class="ch"><canvas id="c_mo"></canvas></div></div>
+ <div class="card"><h3>Yearly passengers</h3><div class="sub">COVID dip in 2020 and the record recovery since</div><div class="ch"><canvas id="c_yr"></canvas></div></div></div>
+ <div class="card" style="margin-top:16px"><div class="bar"><div><h3>India aviation network · ${yl(S.year)}</h3><div class="sub">Bubble = airport passengers · line thickness = route traffic · click anything</div></div><select id="topN" style="margin-left:auto"><option value="25">Top 25 routes</option><option value="60" selected>Top 60 routes</option><option value="150">Top 150 routes</option></select></div><div id="map" class="map"></div></div>
+ <div class="g g3"><div class="card"><h3>Airline market share</h3><div class="sub">${yl(S.year)}</div><div class="ch s"><canvas id="c_sh"></canvas></div></div>
+ <div class="card"><h3>Busiest airports</h3><div class="sub">Arriving + departing passengers</div><div class="ch s"><canvas id="c_ap"></canvas></div></div>
+ <div class="card"><h3>Key insights</h3><div class="sub">Generated from the data</div>
+  <div class="ins"><i>📅</i><div>Busiest month in ${yl(S.year)} was <b>${MN[pk]}</b> with ${fmt(o.months[pk])} passengers.</div></div>
+  <div class="ins"><i>🏆</i><div><b>${o.share[0][0]}</b> carried ${(o.share[0][1]/tot*100).toFixed(0)}% of all domestic passengers.</div></div>
+  <div class="ins"><i>🏢</i><div><b>${T(o.airports[0][0])}</b> is the busiest airport with ${fmt(o.airports[0][1])} passengers.</div></div>
+  <div class="ins"><i>📈</i><div>${S.year>2019&&yi>=0?`Traffic is <b>${pct(+((o.ypax[cur]/o.ypax[yi]-1)*100).toFixed(0))}</b> versus pre-COVID 2019${ytd?' (part-year)':''}.`:'Select a later year to compare with pre-COVID 2019.'}</div></div></div></div>
+ <div class="card" style="margin-top:16px"><h3>International passengers (to + from India)</h3><div class="sub">Quarterly DGCA country data, summed by year</div><div class="ch s"><canvas id="c_in"></canvas></div></div>`;
+ document.querySelectorAll('[data-v]').forEach(count);
+ mk('c_mo',{type:'line',data:{labels:MN,datasets:[ln('Passengers',o.months,COL[0],true)]},options:opt({plugins:{legend:{display:false}}})});
+ mk('c_yr',{type:'bar',data:{labels:yearTick(o.years),datasets:[{label:'Passengers',data:o.ypax,borderRadius:6,backgroundColor:o.years.map(y=>y==S.year?'#FF9F43':'#38BDF866')}]},options:opt({plugins:{legend:{display:false}},onClick:(e,a)=>{if(a.length){S.year=o.years[a[0].index];$('#yearSel').value=S.year;nav()}}})});
+ mk('c_sh',{type:'doughnut',data:{labels:o.share.map(x=>x[0]),datasets:[{data:o.share.map(x=>x[1]),backgroundColor:COL,borderColor:'#0B1630',borderWidth:3}]},options:opt({cutout:'62%',plugins:{legend:{position:'right',labels:{usePointStyle:true,boxWidth:7}}}},false)});
+ mk('c_ap',{type:'bar',data:{labels:o.airports.map(x=>T(x[0])),datasets:[{label:'Passengers',data:o.airports.map(x=>x[1]),backgroundColor:'#34D399',borderRadius:5}]},options:opt({indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>fmt(v)}},y:{grid:{display:false}}}},false)});
+ mk('c_in',{type:'line',data:{labels:o.iy,datasets:[ln('International passengers',o.ipax,COL[3],true)]},options:opt({plugins:{legend:{display:false}}})});
+ baseMap('map');let N=await network(MAP,60);$('#topN').onchange=async e=>{N.layer.remove();N=await network(MAP,+e.target.value)}}
+
+/* ---------- AIRLINES ---------- */
+async function airlines(p){const names=S.meta.airlines.map(a=>a.name);S.a1=p[0]||S.a1||'IndiGo';S.a2=p[1]||S.a2||'Air India';
+ $('#app').innerHTML=`<div class="bar"><h2>Airline comparison</h2><select id="a1"></select><span class="vs">VS</span><select id="a2"></select></div><p class="mu" style="margin:0">Every airline in DGCA scheduled-domestic data, including those that have closed or merged.</p>
+ <div class="g g2" id="prof"></div><div class="g g2"><div class="card"><h3>Passengers per year</h3><div class="ch"><canvas id="c_a1"></canvas></div></div><div class="card"><h3>Market share per year (%)</h3><div class="ch"><canvas id="c_a2"></canvas></div></div>
+ <div class="card"><h3>Passenger load factor (%)</h3><div class="sub">Share of seats filled</div><div class="ch"><canvas id="c_a3"></canvas></div></div><div class="card"><h3>How the market evolved</h3><div class="sub">Top 8 airlines by lifetime passengers · share of yearly total</div><div class="ch"><canvas id="c_a4"></canvas></div></div></div>
+ <div class="note">Vistara merged into Air India (Nov 2024), and AirAsia India became Air India Express, so their lines stop or start around then. Go First stopped operating in 2023.</div>`;
+ fill('#a1',names,S.a1);fill('#a2',names,S.a2);
+ const load=async()=>{S.a1=$('#a1').value;S.a2=$('#a2').value;const [a,b]=await Promise.all([API('/api/airline?name='+encodeURIComponent(S.a1)+'&year='+S.year),API('/api/airline?name='+encodeURIComponent(S.a2)+'&year='+S.year)]);
+  const pf=(d,c)=>`<div class="card prof" style="--c:${c}"><h3 style="font-size:20px">${d.name}</h3><div class="sub">Active ${d.kpi.first}–${d.kpi.last} · figures for ${yl(d.kpi.year)}</div><div class="mini">${[['Passengers',fmt(d.kpi.pax)],['Flights',fmt(d.kpi.flights)],['Market share',d.kpi.share+'%'],['Load factor',d.kpi.plf==null?'–':d.kpi.plf+'%'],['YoY growth',pct(d.kpi.growth)]].map(([l,v])=>`<div><b>${v}</b><span>${l}</span></div>`).join('')}</div></div>`;
+  $('#prof').innerHTML=pf(a,COL[0])+pf(b,COL[1]);const L=yearTick(a.years);
+  mk('c_a1',{type:'line',data:{labels:L,datasets:[ln(a.name,a.pax,COL[0],true),ln(b.name,b.pax,COL[1],true)]},options:opt()});
+  mk('c_a2',{type:'line',data:{labels:L,datasets:[ln(a.name,a.share,COL[0]),ln(b.name,b.share,COL[1])]},options:opt({scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>v+'%'}}}})});
+  mk('c_a3',{type:'line',data:{labels:L,datasets:[ln(a.name,a.plf,COL[0]),ln(b.name,b.plf,COL[1])]},options:opt({scales:{x:{grid:{display:false}},y:{min:50,ticks:{callback:v=>v+'%'}}}})})};
+ $('#a1').onchange=$('#a2').onchange=load;await load();
+ const sh=await API('/api/shares');mk('c_a4',{type:'bar',data:{labels:yearTick(sh.years),datasets:Object.entries(sh.series).map(([k,v],i)=>({label:k,data:v,backgroundColor:COL[i%8],borderWidth:0}))},options:opt({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,max:100,ticks:{callback:v=>v+'%'}}},plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:7}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}%`}}}})})}
+
+/* ---------- AIRPORTS ---------- */
+async function airports(p){const M=S.meta,cities=M.cities.map(c=>({v:c,t:T(c)}));S.p1=p[0]||S.p1||'AHMEDABAD';S.p2=S.p2??'MUMBAI';S.p3=S.p3??'';
+ $('#app').innerHTML=`<div class="bar"><h2>Airport analysis</h2><select id="p1"></select><span class="vs">VS</span><select id="p2"></select><span class="vs">VS</span><select id="p3"></select></div>
+ <p class="mu" style="margin:0">Passengers = arriving + departing on scheduled domestic flights between city pairs.</p><div class="g g5" id="pk"></div>
+ <div class="g g2"><div class="card"><h3>Passenger trend</h3><div class="sub">Yearly — compare up to three airports</div><div class="ch"><canvas id="c_p1"></canvas></div></div><div class="card"><h3 id="ptitle">Top destinations</h3><div class="sub">Passengers exchanged with each partner city</div><div class="ch"><canvas id="c_p2"></canvas></div></div></div>
+ <div class="card" style="margin-top:16px"><h3>Airport ranking · ${yl(S.year)}</h3><div class="sub">Click a row to analyse that airport</div><div style="overflow-x:auto"><table id="rank"></table></div></div>`;
+ fill('#p1',cities,S.p1);fill('#p2',[{v:'',t:'— none —'},...cities],S.p2);fill('#p3',[{v:'',t:'— none —'},...cities],S.p3);
+ const load=async()=>{S.p1=$('#p1').value;S.p2=$('#p2').value;S.p3=$('#p3').value;const cs=[S.p1,S.p2,S.p3].filter(Boolean),ds=await Promise.all(cs.map(c=>API(`/api/airport?city=${encodeURIComponent(c)}&year=${S.year}`))),a=ds[0],k=a.kpi;
+  $('#pk').innerHTML=kpi('Passengers · '+yl(S.year),k.pax,chip(k.growth))+kpi('Rank',k.rank?'#'+k.rank:'–','by traffic',false)+kpi('Destinations',k.dest,'connected cities')+kpi('Freight (tonnes)',k.freight||0,'cargo handled')+kpi('Top partner',T(a.partners[0]?.[0]||'–'),fmt(a.partners[0]?.[1])+' passengers',false);document.querySelectorAll('[data-v]').forEach(count);
+  mk('c_p1',{type:'line',data:{labels:yearTick(a.years),datasets:ds.map((d,i)=>ln(T(d.city),d.pax,COL[i],i==0))},options:opt()});
+  $('#ptitle').textContent='Top destinations from '+T(a.city);
+  mk('c_p2',{type:'bar',data:{labels:a.partners.map(x=>T(x[0])),datasets:[{label:'Passengers',data:a.partners.map(x=>x[1]),backgroundColor:COL[1],borderRadius:5}]},options:opt({indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>fmt(v)}},y:{grid:{display:false}}}},false)})};
+ $('#p1').onchange=$('#p2').onchange=$('#p3').onchange=load;await load();
+ const ap=await API('/api/airports?year='+S.year);$('#rank').innerHTML='<tr><th>#</th><th>Airport</th><th>Passengers</th><th>Growth</th><th>Top partner</th></tr>'+ap.slice(0,15).map((a,i)=>`<tr class="k" data-c="${a.city}"><td>${i+1}</td><td><b>${T(a.city)}</b></td><td>${fmt(a.pax)}</td><td>${chip(a.growth)||'–'}</td><td>${T(a.top||'–')}</td></tr>`).join('');
+ document.querySelectorAll('#rank tr.k').forEach(r=>r.onclick=()=>{$('#p1').value=r.dataset.c;load();window.scrollTo({top:0,behavior:'smooth'})})}
+
+/* ---------- ROUTES ---------- */
+async function routes(p){const cities=S.meta.cities.map(c=>({v:c,t:T(c)}));S.ra=p[0]||S.ra||'AHMEDABAD';S.rb=p[1]||S.rb||'DELHI';
+ $('#app').innerHTML=`<div class="bar"><h2>Route explorer</h2><select id="ra"></select><span class="vs">⇄</span><select id="rb"></select></div><p class="mu" style="margin:0">Pick two cities, or click a line on the map. Traffic is counted in both directions.</p>
+ <div class="g g5" id="rk"></div><div class="g g2"><div class="card"><h3>Network · ${yl(S.year)}</h3><div class="sub">Your selected route is highlighted in orange</div><div id="map" class="map" style="height:400px"></div></div>
+ <div class="card"><h3>Route traffic</h3><div class="sub">Yearly passengers</div><div class="ch s"><canvas id="c_r1"></canvas></div><h3 style="margin-top:12px">Monthly passengers</h3><div class="ch s"><canvas id="c_r2"></canvas></div></div></div>
+ <div class="card" style="margin-top:16px"><h3>Top 10 routes · ${yl(S.year)}</h3><div class="sub">Click a row to explore</div><div style="overflow-x:auto"><table id="top"></table></div></div>
+ <div class="note">The open DGCA city-pair data records passengers and cargo, but not flights or airline per route, so those are not shown.</div>`;
+ fill('#ra',cities,S.ra);fill('#rb',cities,S.rb);baseMap('map');let HL=null;const N=await network(MAP,60,(a,b)=>{$('#ra').value=a;$('#rb').value=b;load()});
+ const load=async()=>{S.ra=$('#ra').value;S.rb=$('#rb').value;HL?.remove();
+  try{const d=await API(`/api/route?a=${encodeURIComponent(S.ra)}&b=${encodeURIComponent(S.rb)}&year=${S.year}`),k=d.kpi;
+   $('#rk').innerHTML=kpi('Passengers · '+yl(S.year),k.pax,chip(k.growth))+kpi('Avg per day',k.daily,'both directions')+kpi('National rank',k.rank?'#'+k.rank:'–','among all routes',false)+kpi('Freight (tonnes)',k.freight||0,'cargo')+kpi('Route',`${T(d.a)} ⇄ ${T(d.b)}`,'',false);document.querySelectorAll('[data-v]').forEach(count);
+   mk('c_r1',{type:'bar',data:{labels:yearTick(d.years),datasets:[{label:'Passengers',data:d.pax,backgroundColor:COL[0],borderRadius:5}]},options:opt({plugins:{legend:{display:false}}})});
+   mk('c_r2',{type:'line',data:{labels:d.mm,datasets:[ln('Passengers',d.mp,COL[1],true)]},options:opt({plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{maxTicksLimit:8}},y:{ticks:{callback:v=>fmt(v)}}}})});
+   const a=N.pos[S.ra],b=N.pos[S.rb];if(a&&b){HL=L.polyline([a,b],{color:'#FF9F43',weight:5}).addTo(MAP);MAP.fitBounds([a,b],{padding:[60,60]})}}
+  catch(e){$('#rk').innerHTML=`<div class="card" style="grid-column:1/-1">${e.error||'No data'}</div>`}};
+ $('#ra').onchange=$('#rb').onchange=load;await load();
+ const t=await API(`/api/routes?year=${S.year}&limit=10`);$('#top').innerHTML='<tr><th>#</th><th>Route</th><th>Passengers</th></tr>'+t.map((r,i)=>`<tr class="k" data-a="${r.a}" data-b="${r.b}"><td>${i+1}</td><td><b>${T(r.a)} ⇄ ${T(r.b)}</b></td><td>${fmt(r.pax)}</td></tr>`).join('');
+ document.querySelectorAll('#top tr.k').forEach(r=>r.onclick=()=>{$('#ra').value=r.dataset.a;$('#rb').value=r.dataset.b;load();window.scrollTo({top:0,behavior:'smooth'})})}
+
+/* ---------- RELIABILITY ---------- */
+async function reliability(){const r=await API('/api/reliability'),D=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];let m='otp';
+ $('#app').innerHTML=`<div class="bar"><h2>Reliability &amp; efficiency</h2><div class="tabs"><button data-m="otp" class="on">On-time performance</button><button data-m="plf">Load factor</button></div></div>
+ <p class="mu" style="margin:0">Real daily figures reported by the Ministry of Civil Aviation, averaged by month (${r.months[0]} to ${r.months.at(-1)}).</p>
+ <div class="card" style="margin-top:16px"><h3 id="rt">Monthly on-time performance (%)</h3><div class="ch" style="height:340px"><canvas id="c_t1"></canvas></div></div>
+ <div class="g g2"><div class="card"><h3>OTP leaderboard</h3><div class="sub">Average over ${r.window[0]} to ${r.window[2]}</div><div class="ch s"><canvas id="c_t2"></canvas></div></div>
+ <div class="card"><h3>Busiest weekdays</h3><div class="sub">Average daily domestic departures</div><div class="ch s"><canvas id="c_t3"></canvas></div></div></div>
+ <div class="note">Only airlines the Ministry reports daily appear here, and no delay data exists for schedule-only records, so nothing is estimated.</div>`;
+ const draw=()=>{$('#rt').textContent=m=='otp'?'Monthly on-time performance (%)':'Monthly passenger load factor (%)';
+  mk('c_t1',{type:'line',data:{labels:r.months,datasets:Object.entries(r[m]).map(([k,v],i)=>ln(k,v,COL[i%8]))},options:opt({scales:{x:{grid:{display:false},ticks:{maxTicksLimit:10}},y:{min:40,max:100,ticks:{callback:v=>v+'%'}}},plugins:{tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}%`}}}})})};
+ document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{m=b.dataset.m;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x==b));draw()});draw();
+ mk('c_t2',{type:'bar',data:{labels:r.board.map(x=>x[0]),datasets:[{label:'OTP %',data:r.board.map(x=>x[1]),backgroundColor:r.board.map(x=>x[1]>=85?'#34D399':x[1]>=70?'#FF9F43':'#FB7185'),borderRadius:6}]},options:opt({plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:0,max:100}}})});
+ mk('c_t3',{type:'bar',data:{labels:D,datasets:[{label:'Departures',data:r.wd,backgroundColor:COL[0],borderRadius:6}]},options:opt({plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:false}}})})}
+
+/* ---------- FORECAST ---------- */
+async function forecast(){const M=S.meta;S.fs=S.fs||'total|';
+ $('#app').innerHTML=`<div class="bar"><h2>Passenger forecast</h2><select id="fs"><option value="total|">All India</option><optgroup label="Airlines">${M.airlines.filter(a=>a.last>=M.ly).map(a=>`<option value="airline|${a.name}">${a.name}</option>`).join('')}</optgroup><optgroup label="Airports">${M.cities.slice(0,40).map(c=>`<option value="airport|${c}">${T(c)}</option>`).join('')}</optgroup></select></div>
+ <p class="mu" style="margin:0">Next six months, projected from the last 24 months of trend and seasonality.</p><div class="g g3" id="fk"></div>
+ <div class="card" style="margin-top:16px"><h3>Historical vs forecast</h3><div class="sub">Orange dashed = forecast · shaded = likely range</div><div class="ch" style="height:380px"><canvas id="c_f"></canvas></div></div>
+ <div class="note">A simple statistical projection (linear trend plus seasonal pattern) for a course project. It cannot foresee shocks such as fuel prices, groundings or policy changes.</div>`;
+ $('#fs').value=S.fs;const load=async()=>{S.fs=$('#fs').value;const [k,n]=S.fs.split('|'),x=await API(`/api/forecast?kind=${k}&name=${encodeURIComponent(n)}`),h=x.hist,nf=x.forecast.length,pad=Array(h.length-1).fill(null),last=h.at(-1);
+  const prev=h.slice(-12,-12+nf).reduce((a,b)=>a+b,0),sum=x.forecast.reduce((a,b)=>a+b,0),pk=x.forecast.indexOf(Math.max(...x.forecast));
+  $('#fk').innerHTML=kpi('Next 6 months',sum,'total passengers expected')+kpi('Vs same months last year',pct(+((sum/prev-1)*100).toFixed(1)),'projected change',false)+kpi('Peak month',x.fmonths[pk],fmt(x.forecast[pk])+' passengers',false);document.querySelectorAll('[data-v]').forEach(count);
+  mk('c_f',{type:'line',data:{labels:[...x.months,...x.fmonths],datasets:[ln('Historical',[...h,...Array(nf).fill(null)],COL[0],true),ln('Forecast',[...pad,last,...x.forecast],COL[1],false,[7,5]),
+   {label:'Likely range',data:[...pad,last,...x.hi],borderWidth:0,pointRadius:0,fill:'+1',backgroundColor:'#FF9F4326',tension:.35},{label:'_low',data:[...pad,last,...x.lo],borderWidth:0,pointRadius:0,tension:.35}]},
+   options:opt({scales:{x:{grid:{display:false},ticks:{maxTicksLimit:10}},y:{ticks:{callback:v=>fmt(v)}}}})})};
+ $('#fs').onchange=load;await load()}
+
+/* ---------- ABOUT ---------- */
+async function about(){$('#app').innerHTML=`<div class="bar"><h2>About AeroPulse India</h2></div><div class="card"><h3>What it is</h3><p class="mu">An Indian aviation Big Data analytics platform. Explore the network, compare airlines, airports and routes, check reliability, and forecast demand. All figures are computed from real government data.</p>
+ <h3>Architecture</h3><div class="flow"><div><b>DGCA / MoCA</b>raw CSV data</div><s>→</s><div><b>HDFS</b>distributed storage</div><s>→</s><div><b>MapReduce</b>route, airport, airline totals</div><s>→</s><div><b>Spark</b>cleaning, joins, aggregates</div><s>→</s><div><b>Python</b>pandas, forecast</div><s>→</s><div><b>Flask API</b>JSON endpoints</div><s>→</s><div><b>Website + Power BI</b>interactive views</div></div></div>
+ <div class="g g2"><div class="card"><h3>Data sources</h3><p class="mu">Domestic carrier statistics, city-pair traffic, daily operations (on-time performance, load factor) and international country traffic, consolidated by the open <a href="https://github.com/Vonter/india-aviation-traffic">india-aviation-traffic</a> dataset from DGCA and the Ministry of Civil Aviation.</p></div>
+ <div class="card"><h3>Good to know</h3><p class="mu">City names are normalised (for example Dabolim and Mopa are shown as Goa). Airlines that merged or closed are kept separate. ${S.meta.ly} contains data up to ${MN[S.meta.lm-1]} only, so it is marked YTD. Delay figures appear only where real on-time data exists.</p></div></div>`}
+
+/* ---------- router ---------- */
+const PAGES={overview,airlines,airports,routes,reliability,forecast,about};
+async function nav(){const [p,...a]=location.hash.slice(2).split('/'),k=PAGES[p]?p:'overview';
+ Object.values(CH).forEach(c=>c.destroy());Object.keys(CH).forEach(x=>delete CH[x]);if(MAP){MAP.remove();MAP=null}
+ document.querySelectorAll('.links a').forEach(x=>x.classList.toggle('on',x.dataset.p==k));$('#app').innerHTML='<div class="load">Loading aviation data…</div>';
+ try{await PAGES[k](a.map(decodeURIComponent))}catch(e){$('#app').innerHTML=`<div class="card">Something went wrong: ${e.error||e}</div>`;console.error(e)}
+ if(!a.length)window.scrollTo(0,0)}
+(async()=>{S.meta=await API('/api/meta');S.year=S.meta.full;
+ fill('#yearSel',S.meta.years.slice().reverse().map(y=>({v:y,t:yl(y)})),S.year);$('#yearSel').onchange=e=>{S.year=+e.target.value;nav()};
+ window.addEventListener('hashchange',nav);nav()})();
+</script></body></html>
