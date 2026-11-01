@@ -165,21 +165,22 @@ Whenever `python app.py` is executed, the pipeline runs before Flask starts.
 ---
 ## 📁 Project Structure
 
+```text
 aeropulse/
 │
-├── app.py                       # Flask backend application
-├── prepare_data.py              # Local CSV preparation script
-├── requirements.txt             # Python dependencies
-├── README.md                    # Project documentation
+├── app.py
+├── prepare_data.py
+├── requirements.txt
+├── README.md
 │
 ├── data/
-│   ├── raw/                     # Original aviation datasets
+│   ├── raw/
 │   │   ├── city.csv
 │   │   ├── daily.csv
 │   │   ├── intl_country.csv
 │   │   └── carrier.csv
 │   │
-│   └── processed/               # Final dashboard datasets
+│   └── processed/
 │       ├── carrier.csv
 │       ├── pairs.csv
 │       ├── cities.csv
@@ -188,14 +189,15 @@ aeropulse/
 │       └── intl.csv
 │
 ├── pipeline/
-│   ├── mapper.py                # Hadoop Mapper
-│   ├── reducer.py               # Hadoop Reducer
-│   ├── spark_process.py         # Spark processing script
-│   ├── wsl_setup.sh             # WSL runtime setup
-│   └── run_pipeline.sh          # Pipeline execution script
+│   ├── mapper.py
+│   ├── reducer.py
+│   ├── spark_process.py
+│   ├── wsl_setup.sh
+│   └── run_pipeline.sh
 │
 └── static/
-    └── index.html               # Dashboard frontend
+    └── index.html
+```
 
 ## ⚠️ Data Limitations
 - City-pair data includes passenger and cargo information, but not flight counts or airline-level route details.
