@@ -163,7 +163,7 @@ Whenever `python app.py` is executed, the pipeline runs before Flask starts.
 5. Use latitude and longitude fields to create map visualizations.
 
 ---
-📁 Project Structure
+## 📁 Project Structure
 
 aeropulse/
 │
